@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <div class="dashboard-shell">
+        <div class="dashboard-card">
+            <div class="dashboard-header">
+                <div>
+                    <h1>ML-Powered User Management System with CRUD Operations</h1>
+                    <p>Manage records live with Scikit-Learn age categorization.</p>
+                </div>
+            </div>
+            <form class="dashboard-form" method="post" action="{{ url_for('add') if not edit_record else url_for('update', record_id=edit_record.id) }}">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter name" value="{{ edit_record.name if edit_record else '' }}" required />
+                </div>
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" placeholder="Enter age" value="{{ edit_record.age if edit_record else '' }}" min="0" required />
+                </div>
+                <button type="submit" class="primary-button {{ 'update-button' if edit_record else 'add-button' }}">
+                    {{ 'Update' if edit_record else 'Add' }}
+                </button>
+                {% if edit_record %}
+                <a href="{{ url_for('index') }}" class="secondary-button">Cancel</a>
+                {% endif %}
+            </form>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.id }}</td>
+                            <td>{{ record.name }}</td>
+                            <td>{{ record.age }}</td>
+                            <td>{{ record.category }}</td>
+                            <td class="actions-cell">
+                                <a href="{{ url_for('edit', record_id=record.id) }}" class="action-button edit-button">Edit</a>
+                                <a href="{{ url_for('delete', record_id=record.id) }}" class="action-button delete-button">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
